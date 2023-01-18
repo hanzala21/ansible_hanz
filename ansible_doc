@@ -1,0 +1,104 @@
+ssh-keygen -t ed25519 -C "hanzala default"
+(-t means what type of key you want. ed25519 is more secure key then the default one. -C is use for comments)
+
+passphrase: is much more secure
+
+ssh-copy-id -i ~/.ssh/id_ed25519.pub 192.168.68.140
+(-i: are input file where key are store.
+ip address means where to send ssh key)
+
+if you add passphrase and you dont want to enter passphrase each time then you use this method
+
+eval $(ssh-agent)
+
+is a process that run in background and that can cache you passphrase
+it just give me process id. 
+how do you check that ssh-agent is running is background
+
+ps aux | grep (process_id)
+
+how to use ssh-agent
+ssh-add (enter this command if you previously add passphrase in ssh-keygen command and write it the passphrase add is your cache now you dont need passphrase to ssh other server's)
+
+now we create alias to merge previous two commands
+
+alias ssha='eval $(ssh-agent) && ssh-add'
+
+this command is doing same this what previous command is doing
+after enter this command 
+
+ssha
+
+problem of alias: when you close terminal window or you disconnect your instance alias is also gone for safe side you have to do this first
+
+nano .bashrc
+
+and add this command here
+
+alias ssha='eval $(ssh-agent) && ssh-add'
+
+After all this we have install git on our system and create account on github.com 
+
+cat ~/.gitconfig
+what username nad email add you in git
+
+git config --global user_name='hanzala'
+
+git config --global user_email='hanzala.maqsood789@gmail.com'
+
+git staus
+
+git diff filename(its check what change in file and show it)
+
+git add .
+
+git commit -m "message"
+
+git push
+
+
+=============================================================================
+
+first install ansible 
+sudo apt install ansible
+
+create inventory file (contain ip address of each host)
+nano inventory(file_name)
+add ip address of your host machines
+like: 192.168.1.150 etc
+
+This command makes connection to each host inside inventory what you define ip's 
+ansible all --key-file ~/.ssh/ansible -i inventory -m ping
+(-m: it is module which you use for testing like i'm use ping module)
+
+create ansible.cfg file
+nano ansible.cfg
+[default]
+inventory = inventory
+private_key_file = ~/.ssh/ansible
+
+
+ls /etc/ansible.cfg
+this file alreday create in /etc you have to ignore it first and make local file
+
+now lets shorten the ansible connection command bcz private_key file and inventory we add in ansible.cfg
+ansible all -m ping
+
+ansible all --list-hosts
+this command shows all hosts
+
+
+ansible all -m gather_facts 
+its include list of information of servers, processors, operating system , environment variables
+
+ansible all -m gather_facts --limit 192.168.1.149
+this command limited to one server information
+
+=====================================================================
+
+
+
+
+
+
+
