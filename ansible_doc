@@ -96,6 +96,141 @@ this command limited to one server information
 
 =====================================================================
 
+ansible all -m apt -a update_cache=true --become --ask-become-pass
+this command is use when you update the servers machines if module is debian base means apt or rpm base means yum and dont ask sudo privilege
+and if sudors password same of all servers then this command is working otherwise it doesn't working
+
+
+ansible all -m apt -a name=vim-nox --become --ask-become-pass
+this command is use when you install vim-nox on server machine through ansible-controller
+
+apt search vim-nox
+this command is use to search server machine that vim-nox install on servers
+
+sudo apt update
+
+sudo apt dist-upgrade
+
+ansible all -m apt -a name=snapd --become --ask-become-pass
+snapd is also use for updtae package. if server machines already update
+then when you hit this command its show this
+192.168.77.249 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "cache_update_time": 1674118546,
+    "cache_updated": false,
+    "changed": false
+}
+changed:false means its already update
+
+ansible all -m apt -a "name=snapd state=latest" --become --ask-become-pass
+when you want to add two parameters in argument field then you this
+
+cd /var/log/apt/history.log
+this command is showing what you update on server machines
+
+ansible all -m apt -a "upgrade=dist" --become --ask-become-pass
+this command is update all packages of you server machines
+
+===================================================================
+standard extension for play book is .yml
+so enter this command 
+nano install_apache.yml to open it and write palybook file
+===============================================================
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: install apache2 package
+    apt:
+      name: apache2
+
+====================================================================
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository index
+    apt:
+      update_cache: yes
+
+  - name: install apache2 package
+    apt:
+      name: apache2
+====================================================================
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository index
+    apt:
+      update_cache: yes
+
+  - name: install apache2 package
+    apt:
+      name: apache2
+
+  - name: add php support for apache
+    apt:
+      name: libapache2-mod-php
+=====================================================================
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository index
+    apt:
+      update_cache: yes
+
+  - name: install apache2 package
+    apt:
+      name: apache2
+      state: latest
+
+  - name: add php support for apache
+    apt:
+      name: libapache2-mod-php
+      state: latest
+=================================================================
+now we create another yml file remove_apache.yml and copy text of install_apache.yml to remove_apache.yml and change state to absent
+if you do it then apache web page not open also other tasks also
+
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository index
+    apt:
+      update_cache: yes
+
+  - name: install apache2 package
+    apt:
+      name: apache2
+      state: absent
+
+  - name: add php support for apache
+    apt:
+      name: libapache2-mod-php
+      state: absent
+================================================================
+Note: if you run install_apache.yml its install all task that you write it in file and show webserver page or if you run remove_apache.yml it disable all those things.
+=================================================================
+
+
+
+
+
 
 
 
